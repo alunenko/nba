@@ -7,8 +7,7 @@ var gulp       = require('gulp')
   , connect    = require('gulp-connect')
   , open       = require('gulp-open')
   , livereload = require('gulp-livereload')
-  , bower      = require('gulp-bower')
-  , gulpif      = require('gulp-if');
+  , gulpif     = require('gulp-if');
 
 var env = process.env.NODE_ENV || 'development';
 var outputPath = 'builds/' + env;
@@ -32,16 +31,11 @@ gulp.task('babel', function() {
 });
 
 gulp.task('js', ['babel'], function() {
-  gulp.src( '_tmp/js/**/*.js' )
+  gulp.src( '../_tmp/js/**/*.js' )
     .pipe( concat('all.min.js') )
     .pipe( gulpif(env === 'production', uglify()) )
     .pipe( gulp.dest('../' + outputPath + '/js') )
     .pipe( livereload() );
-});
-
-// bower
-gulp.task('bower', function() {
-  return bower();
 });
 
 // move to the vendor
@@ -72,7 +66,7 @@ gulp.task('connect', function() {
   })
 });
 
-gulp.task('open', function() {
+gulp.task('open', ['bootstrap', 'angular', 'jade', 'js', 'connect'], function() {
   return gulp.src('')
     .pipe( open({
       app: 'chrome',
@@ -80,4 +74,4 @@ gulp.task('open', function() {
     }) );
 });
 
-gulp.task('default', ['bower', 'jade', 'js', 'connect', 'open', 'bootstrap', 'angular', 'watch']);
+gulp.task('default', ['open', 'watch']);
