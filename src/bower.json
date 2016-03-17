@@ -1,0 +1,21 @@
+{
+  "name": "nba",
+  "description": "test task for GNS",
+  "main": "index.html",
+  "authors": [
+    "antoni lunenko <antoni.lunenko@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/alunenko/nba",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}

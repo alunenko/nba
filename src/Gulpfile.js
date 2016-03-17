@@ -6,10 +6,10 @@ var gulp       = require('gulp')
   , stylus     = require('gulp-stylus')
   , connect    = require('gulp-connect')
   , open       = require('gulp-open')
-  , livereload = require('gulp-livereload');
+  , livereload = require('gulp-livereload')
+  , bower      = require('gulp-bower');
 
 var env = process.env.NODE_ENV || 'development';
-
 var outputPath = 'builds/' + env;
 
 gulp.task('jade', function() {
@@ -21,10 +21,20 @@ gulp.task('jade', function() {
     .pipe( livereload() );
 });
 
+gulp.task('bower', function() {
+  return bower();
+});
+
+gulp.task('bootstrap', function() {
+  return gulp.src('bower_components/bootstrap/dist/css/bootstrap.min.css')
+    .pipe( gulp.dest('../' + outputPath + '/vendor/bootstrap/css') )
+    .pipe( livereload() );
+});
+
 gulp.task('watch', function() {
+  livereload.listen();
   //gulp.watch( 'css/**/*.styl', ['css'] );
   //gulp.watch( 'js/**/*.js', ['js'] );
-  livereload.listen();
   gulp.watch( ['templates/**/*.jade'], ['jade'] );
 });
 
@@ -44,4 +54,4 @@ gulp.task('open', function() {
     }) );
 });
 
-gulp.task('default', ['jade', 'connect', 'open', 'watch']);
+gulp.task('default', ['bower', 'jade', 'connect', 'open', 'bootstrap', 'watch']);
