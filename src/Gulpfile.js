@@ -7,7 +7,8 @@ var gulp       = require('gulp')
   , connect    = require('gulp-connect')
   , open       = require('gulp-open')
   , livereload = require('gulp-livereload')
-  , bower      = require('gulp-bower');
+  , bower      = require('gulp-bower')
+  , gulpif      = require('gulp-if');
 
 var env = process.env.NODE_ENV || 'development';
 var outputPath = 'builds/' + env;
@@ -21,20 +22,45 @@ gulp.task('jade', function() {
     .pipe( livereload() );
 });
 
+gulp.task('babel', function() {
+  return gulp.src('js/**/*.js')
+  .pipe(babel({
+    presets: ['es2015']
+  }))
+  .pipe(gulp.dest('../_tmp/js'))
+  .pipe( livereload() );
+});
+
+gulp.task('js', ['babel'], function() {
+  gulp.src( '_tmp/js/**/*.js' )
+    .pipe( concat('all.min.js') )
+    .pipe( gulpif(env === 'production', uglify()) )
+    .pipe( gulp.dest('../' + outputPath + '/js') )
+    .pipe( livereload() );
+});
+
+// bower
 gulp.task('bower', function() {
   return bower();
 });
 
+// move to the vendor
 gulp.task('bootstrap', function() {
   return gulp.src('bower_components/bootstrap/dist/css/bootstrap.min.css')
     .pipe( gulp.dest('../' + outputPath + '/vendor/bootstrap/css') )
     .pipe( livereload() );
 });
 
+gulp.task('angular', function() {
+  return gulp.src('bower_components/angular/angular.min.js')
+    .pipe( gulp.dest('../' + outputPath + '/vendor/angular/js') )
+    .pipe( livereload() );
+});
+
 gulp.task('watch', function() {
   livereload.listen();
   //gulp.watch( 'css/**/*.styl', ['css'] );
-  //gulp.watch( 'js/**/*.js', ['js'] );
+  gulp.watch( 'js/**/*.js', ['js'] );
   gulp.watch( ['templates/**/*.jade'], ['jade'] );
 });
 
@@ -54,4 +80,4 @@ gulp.task('open', function() {
     }) );
 });
 
-gulp.task('default', ['bower', 'jade', 'connect', 'open', 'bootstrap', 'watch']);
+gulp.task('default', ['bower', 'jade', 'js', 'connect', 'open', 'bootstrap', 'angular', 'watch']);
