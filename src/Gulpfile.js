@@ -21,6 +21,17 @@ gulp.task('jade', function() {
     .pipe( livereload() );
 });
 
+gulp.task('css', function() {
+  return gulp.src('css/**/*.styl')
+    .pipe( stylus({
+      whitespace: true,
+      compress: env === 'development'
+    }) )
+    .pipe( concat('style.min.css') )
+    .pipe( gulp.dest('../' + outputPath + '/css') )
+    .pipe( livereload() );
+});
+
 gulp.task('babel', function() {
   return gulp.src('js/**/*.js')
   .pipe(babel({
@@ -66,7 +77,7 @@ gulp.task('connect', function() {
   })
 });
 
-gulp.task('open', ['bootstrap', 'angular', 'jade', 'js', 'connect'], function() {
+gulp.task('open', ['bootstrap', 'angular', 'jade', 'css', 'js', 'connect'], function() {
   return gulp.src('')
     .pipe( open({
       app: 'chrome',
