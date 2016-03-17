@@ -1,0 +1,29 @@
+{
+  "name": "nba",
+  "version": "0.0.0",
+  "description": "test task for GNS",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/alunenko/nba.git"
+  },
+  "author": "antoni lunenko <antoni.lunenko@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alunenko/nba/issues"
+  },
+  "homepage": "https://github.com/alunenko/nba#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-connect": "^3.1.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-open": "^1.0.0",
+    "gulp-stylus": "^2.3.1",
+    "gulp-uglify": "^1.5.3"
+  }
+}
