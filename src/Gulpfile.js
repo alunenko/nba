@@ -1,11 +1,12 @@
-var gulp    = require('gulp')
-  , uglify  = require('gulp-uglify')
-  , concat  = require('gulp-concat')
-  , babel   = require('gulp-babel')
-  , jade    = require('gulp-jade')
-  , stylus  = require('gulp-stylus')
-  , connect = require('gulp-connect')
-  , open    = require('gulp-open');
+var gulp       = require('gulp')
+  , uglify     = require('gulp-uglify')
+  , concat     = require('gulp-concat')
+  , babel      = require('gulp-babel')
+  , jade       = require('gulp-jade')
+  , stylus     = require('gulp-stylus')
+  , connect    = require('gulp-connect')
+  , open       = require('gulp-open')
+  , livereload = require('gulp-livereload');
 
 var env = process.env.NODE_ENV || 'development';
 
@@ -17,7 +18,14 @@ gulp.task('jade', function() {
       pretty: env === 'development'
     }) )
     .pipe( gulp.dest('../' + outputPath) )
-    .pipe( connect.reload() );
+    .pipe( livereload() );
+});
+
+gulp.task('watch', function() {
+  //gulp.watch( 'css/**/*.styl', ['css'] );
+  //gulp.watch( 'js/**/*.js', ['js'] );
+  livereload.listen();
+  gulp.watch( ['templates/**/*.jade'], ['jade'] );
 });
 
 gulp.task('connect', function() {
@@ -28,7 +36,6 @@ gulp.task('connect', function() {
   })
 });
 
-
 gulp.task('open', function() {
   return gulp.src('')
     .pipe( open({
@@ -37,4 +44,4 @@ gulp.task('open', function() {
     }) );
 });
 
-gulp.task('default', ['jade', 'connect', 'open']);
+gulp.task('default', ['jade', 'connect', 'open', 'watch']);
