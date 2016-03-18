@@ -1,15 +1,11 @@
 doctype html
 html(lang="en" ng-app="nba")
-  head
-    meta(charset="UTF-8")
-    link(href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet")
-    link(href="css/style.min.css" rel="stylesheet")
-    title nba
+head
+  meta(charset="UTF-8")
+  include partials/services/css
+  title nba
 
-  body(ng-controller="PlayersCtrl as players")
-    .well
-      h1(ng-bind="header")
-      input(type="text" ng-model="header")
+body
+  include partials/players-table
 
-    script(src="vendor/angular/js/angular.min.js")
-    script(src="js/all.min.js")
+  include partials/services/js

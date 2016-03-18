@@ -13,7 +13,7 @@ var env = process.env.NODE_ENV || 'development';
 var outputPath = 'builds/' + env;
 
 gulp.task('jade', function() {
-  return gulp.src( 'templates/**/*.jade' )
+  return gulp.src( 'templates/*.jade' )
     .pipe( jade({
       pretty: env === 'development'
     }) )
@@ -64,7 +64,7 @@ gulp.task('angular', function() {
 
 gulp.task('watch', function() {
   livereload.listen();
-  //gulp.watch( 'css/**/*.styl', ['css'] );
+  gulp.watch( 'css/**/*.styl', ['css'] );
   gulp.watch( 'js/**/*.js', ['js'] );
   gulp.watch( ['templates/**/*.jade'], ['jade'] );
 });
