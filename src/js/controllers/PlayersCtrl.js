@@ -4,10 +4,15 @@ angular.module('nba')
     $http.get('../database/data.result-2.json')
       .success(function(response) {
         $scope.playersData = response;
+
+        for (var i = 0; i < $scope.playersData.players.length; i++) {
+          $scope.calculateProj($scope.playersData.players[i]);
+        };
       });
 
     $scope.calculateProj = function(player) {
-      var sum = 0;
+      var calcProj = 0
+        , calcProjRound = 0;
 
       /* aliases */
       var min    = player.statsCurrentSeason.minutes.new
@@ -17,19 +22,51 @@ angular.module('nba')
         , ar     = player.statsCurrentSeason.assistsRate.new
         , max_r  = Math.max(ur, rr, ar)
 
-      sum = min * man_ea * (ur + rr + ar) / 3 / max_r;
+      calcProj = min * man_ea * (ur + rr + ar) / 3 / max_r;
+      calcProjRound = Math.round(calcProj * 1000) / 1000;
 
-      return sum;
+      player.proj = calcProjRound;
+
+      return calcProjRound;
     };
 
-    $scope.range = 25;
-    $scope.rangeHide = false;
+    $scope.showMoreCount = 25;
+    $scope.showMoreHide = false;
     $scope.showMore = function() {
-      if(($scope.playersData.players.length - $scope.range) > 25) {
-        $scope.range += 25;
+      if(($scope.playersData.players.length - $scope.showMoreCount) > 25) {
+        $scope.showMoreCount += 25;
       } else {
-        $scope.range = $scope.playersData.players.length;
-        $scope.rangeHide = true;
+        $scope.showMoreCount = $scope.playersData.players.length;
+        $scope.showMoreHide = true;
       }
+    };
+
+    $scope.rangeProjData = {
+      min: 0,
+      max: 200,
+      search: {
+        proj: 0
+      }
+    };
+
+    $scope.rangeSalary = {
+      min: 1,
+      max: 15000,
+      search: {
+        salary: 1
+      }
+    };
+
+    $scope.greaterThan1 = function(prop, val) {
+      return function(item) {
+        return item[prop] >= val[prop];
+      };
+    };
+
+    $scope.greaterThan2 = function(prop, val) {
+      return function(item) {
+        var a = prop.split('.');
+        return item[a[0]][a[1]] >= val[a[1]];
+      };
     };
   }]);
