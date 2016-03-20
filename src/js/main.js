@@ -1,1 +1,1 @@
-angular.module('nba', []);
+var nba = angular.module('nba', []);

@@ -1,0 +1,5 @@
+.col-lg-6.col-md-6.col-sm-6.col-xs-12
+  h4(ng-bind="name")
+  span.float-left(ng-bind="range.search.salary")
+  span.float-right(ng-bind="max")
+  input(type="range" min="{{ min }}" max="{{ max }}" ng-model="range.search.salary")

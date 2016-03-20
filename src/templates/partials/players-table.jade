@@ -1,40 +1,45 @@
 div(ng-controller="PlayersCtrl as players")
-  .well
+  .page-header
     h1 NBA tools 2015
 
-  .col-lg-6.col-md-6.col-sm-6.col-xs-12
-    p projection
-    span(ng-bind="rangeProjData.search.proj" style="float: left")
-    span(ng-bind="rangeProjData.max" style="float: right")
-    input(type="range" min="{{ rangeProjData.min }}" max="{{ rangeProjData.max }}" ng-model="rangeProjData.search.proj")
-
-  .col-lg-6.col-md-6.col-sm-6.col-xs-12
-    p salary
-    span(ng-bind="rangeSalary.search.salary" style="float: left")
-    span(ng-bind="rangeSalary.max" style="float: right")
-    input(type="range" min="{{ rangeSalary.min }}" max="{{ rangeSalary.max }}" ng-model="rangeSalary.search.salary")
+  .well.clear
+    proj(name="projection" min="0" max="200" search="rangeProj")
+    salary(name="salary" min="1" max="15000" search="rangeSalary")
 
   div
     table.table.table-responsive.table-striped.hidden-md.hidden-sm.hidden-xs
       thead
         tr
-          td player
-          td pos
-          td tm
-          td opp
-          td eff pos
-          td min
-          td ur
-          td rr
-          td ar
-          td man ea
-          td proj.
-          td dfs site
-          td sal
-          td val thr
-          td val
+          th player
+          th
+            abbr(title="position") pos
+          th
+            abbr(title="team") tm
+          th
+            abbr(title="opposite") opp
+          th
+            abbr(title="effective position") eff pos
+          th
+            abbr(title="minutes") min
+          th
+            abbr(title="usage rate") ur
+          th
+            abbr(title="rebound rate") rr
+          th
+            abbr(title="assists rate") ar
+          th
+            abbr(title="manual effective adj") man ea
+          th
+            abbr(title="projection") proj.
+          th dfs site
+          th
+            abbr(title="salary") sal
+          th
+            abbr(title="value threshold") val thr
+          th
+            abbr(title="value") val
       tbody
-        tr(ng-repeat="player in playersData.players | limitTo:showMoreCount | filter:greaterThan1('proj', rangeProjData.search) | filter:greaterThan2('draftkings.salary', rangeSalary.search)")
+        tr(ng-repeat="player in playersData.players | limitTo:showMoreCount | filter:greaterThan1('proj', rangeProj.search) | filter:greaterThan2('draftkings.salary', rangeSalary.search)")
           td(ng-bind="player.player")
           td(ng-bind="player.pos.draftkings")
           td(ng-bind="player.team")
@@ -89,26 +94,31 @@ div(ng-controller="PlayersCtrl as players")
           td(ng-bind="player.draftkings.value.new")
 
     table.mobile-table.table.table-responsive.table-striped.table-hover.visible-md-block.visible-sm-block.visible-xs-block.col-md-12.col-sm-12.col-xs-12
-      tr(ng-repeat="player in playersData.players | limitTo:showMoreCount | filter:greaterThan1('proj', rangeProjData.search) | filter:greaterThan2('draftkings.salary', rangeSalary.search)").col-md-6.col-sm-6.col-xs-12
+      tr(ng-repeat="player in playersData.players | limitTo:showMoreCount | filter:greaterThan1('proj', rangeProj.search) | filter:greaterThan2('draftkings.salary', rangeSalary.search)").col-md-6.col-sm-6.col-xs-12
         td
           table.table.table-hover
             tr
               th player
               td(ng-bind="player.player")
             tr
-              th pos
+              th
+                abbr(title="position") pos
               td(ng-bind="player.pos.draftkings")
             tr
-              th tm
+              th
+                abbr(title="team") tm
               td(ng-bind="player.team")
             tr
-              th opp
+              th
+                abbr(title="opposite") opp
               td(ng-bind="player.opp")
             tr
-              th eff pos
+              th
+                abbr(title="effective position") eff pos
               td(ng-bind="player.effectivePos.new")
             tr
-              th min
+              th
+                abbr(title="minutes") min
               td
                 input(
                   type="number"
@@ -118,7 +128,8 @@ div(ng-controller="PlayersCtrl as players")
                   ng-change="calculateProj(player)"
                 )
             tr
-              th ur
+              th
+                abbr(title="usage rate") ur
               td
                 input(
                   type="number"
@@ -129,7 +140,8 @@ div(ng-controller="PlayersCtrl as players")
                   step="0.01"
                 )
             tr
-              th rr
+              th
+                abbr(title="rebound rate") rr
               td
                 input(
                   type="number"
@@ -139,7 +151,8 @@ div(ng-controller="PlayersCtrl as players")
                   ng-change="calculateProj(player)"
                 )
             tr
-              th ar
+              th
+                abbr(title="assists rate") ar
               td
                 input(
                   type="number"
@@ -149,7 +162,8 @@ div(ng-controller="PlayersCtrl as players")
                   ng-change="calculateProj(player)"
                 )
             tr
-              th man ea
+              th
+                abbr(title="manual effective adj") man ea
               td
                 input(
                   type="number"
@@ -160,18 +174,26 @@ div(ng-controller="PlayersCtrl as players")
                   step="0.01"
                 )
             tr
-              th proj.
+              th
+                abbr(title="projection") proj.
               td(ng-bind="player.proj | number:3")
             tr
               th dfs site
               td(ng-bind="player.draftkings.name")
             tr
-              th sal
+              th
+                abbr(title="salary") sal
               td(ng-bind="player.draftkings.salary")
             tr
-              th val thr
+              th
+                abbr(title="value threshold") val thr
               td(ng-bind="player.draftkings.valueThreshold")
             tr
-              th val
+              th
+                abbr(title="value") val
               td(ng-bind="player.draftkings.value.new")
-    span.btn.btn-default(ng-click="showMore()" ng-hide="showMoreHide") show more
+
+    p.btn-white.text-center(aria-label="Left Align" ng-hide="showMoreHide")
+      span.btn.btn-default.btn-lg(ng-click="showMore()")
+        span.glyphicon.glyphicon-repeat
+        span.text-uppercase show more

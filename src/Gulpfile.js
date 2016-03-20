@@ -12,7 +12,7 @@ var gulp       = require('gulp')
 var env = process.env.NODE_ENV || 'development';
 var outputPath = 'builds/' + env;
 
-gulp.task('jade', function() {
+gulp.task('jade', ['directives'], function() {
   return gulp.src( 'templates/*.jade' )
     .pipe( jade({
       pretty: env === 'development'
@@ -21,11 +21,20 @@ gulp.task('jade', function() {
     .pipe( livereload() );
 });
 
+gulp.task('directives', function() {
+  return gulp.src( 'templates/directives/*.jade' )
+    .pipe( jade({
+      pretty: env === 'development'
+    }) )
+    .pipe( gulp.dest('../' + outputPath + '/views/directives/') )
+    .pipe( livereload() );
+});
+
 gulp.task('css', function() {
   return gulp.src('css/**/*.styl')
     .pipe( stylus({
       whitespace: true,
-      compress: env === 'development'
+      compress: env === 'production'
     }) )
     .pipe( concat('style.min.css') )
     .pipe( gulp.dest('../' + outputPath + '/css') )
@@ -50,15 +59,26 @@ gulp.task('js', ['babel'], function() {
 });
 
 // move to the vendor
-gulp.task('bootstrap', function() {
+gulp.task('bootstrap', ['bootstrap-fonts'], function() {
   return gulp.src('bower_components/bootstrap/dist/css/bootstrap.min.css')
     .pipe( gulp.dest('../' + outputPath + '/vendor/bootstrap/css') )
+    .pipe( livereload() );
+});
+gulp.task('bootstrap-fonts', function() {
+  return gulp.src('bower_components/bootstrap/fonts/*.*')
+    .pipe( gulp.dest('../' + outputPath + '/vendor/bootstrap/fonts') )
     .pipe( livereload() );
 });
 
 gulp.task('angular', function() {
   return gulp.src('bower_components/angular/angular.min.js')
     .pipe( gulp.dest('../' + outputPath + '/vendor/angular/js') )
+    .pipe( livereload() );
+});
+
+gulp.task('json', function() {
+  return gulp.src('database/*.*')
+    .pipe( gulp.dest('../' + outputPath + '/database/') )
     .pipe( livereload() );
 });
 
@@ -77,7 +97,7 @@ gulp.task('connect', function() {
   })
 });
 
-gulp.task('open', ['bootstrap', 'angular', 'jade', 'css', 'js', 'connect'], function() {
+gulp.task('open', ['bootstrap', 'angular', 'jade', 'css', 'js', 'json', 'connect'], function() {
   return gulp.src('')
     .pipe( open({
       app: 'chrome',
